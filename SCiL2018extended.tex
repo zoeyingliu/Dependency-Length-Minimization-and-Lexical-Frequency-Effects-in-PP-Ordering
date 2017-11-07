@@ -1,0 +1,169 @@
+%
+% File naaclhlt2016.tex
+%
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage{naaclhlt2016}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{tikz-dependency}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\naaclfinalcopy % Uncomment this line for the final submission
+\def\naaclpaperid{***} %  Enter the naacl Paper ID here
+
+% To expand the titlebox for more authors, uncomment
+% below and set accordingly.
+\addtolength\titlebox{.5in}    
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+
+
+\title{Dependency Length Minimization and Lexical Frequency in Prepositional Phrase Ordering in English}
+
+% Author information can be set in various styles:
+% For several authors from the same institution:
+ \author{Zoey Liu \and Kenji Sagae \\
+         Computational Linguistics Lab, Department of Linguistics \\ University of California, Davis \\ One Shields Avenue, Davis, CA \\ {\tt \{yiliu, sagae\}@ucdavis.edu}}
+
+% if the names do not fit well on one line use
+%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
+% For authors from different institutions:
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \And  ... \And
+%         Author n \\ Address line \\ ... \\ Address line}
+% To start a seperate ``row'' of authors use \AND, as in
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \AND
+%         Author 2 \\ Address line \\ ... \\ Address line \And
+%         Author 3 \\ Address line \\ ... \\ Address line}
+% If the title and author information does not fit in the area allocated,
+% place \setlength\titlebox{<new height>} right after
+% at the top, where <new height> can be something larger than 2.25in
+
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+Finding and explaining the structural variation among languages has served as one of the primary goals in the study of linguistics and cognitive science. Current research in computational linguistics and natural language processing has shown great interest in building statistical models to investigate properties of language universals, as well as in extending automation techniques to unseen or new languages \cite{merlo2015predicting}. To improve the predictive performance of these probabilistic models and computational techniques in capturing cross-linguistic structures, the characterization and quantification of structural differences and regularities across languages are in need. With the availability of multilingual corpora and computational methods, testing theories and generalizations of language typology calls for much more attention as it facilitates uncovering the underlying mechanism for structural patterns in natural language.
+
+Previous research has shown cross-linguistically that the human language parser prefers constituent orders that minimize the distance between syntactic heads and their dependents \cite{futrell2015large} in order to facilitate language production and comprehension \cite{levy2013syntactic}, to reduce memory load \cite{gibson1998linguistic}, or to ease efficient communication \cite{hawkins2014cross}. This preference, known as Dependency Length Minimization (DLM), predicts that if alternative orderings exists for the constituents within the same sentence without affecting meaning and grammaticality, constituents of shorter length tend to be placed closer to their heads and thus shorten overall dependency distance in the sentence. For instance, 
+
+	{\begin{center}
+			\begin{dependency}[theme = simple]
+				\begin{deptext}[font=\footnotesize]
+					(a) He \& drove \& \big[ with \& friends \big] \& \big[ to \& the \& park \& nearby \big]\\
+				\end{deptext}
+				\deproot{2}{ROOT}
+				\depedge{2}{3}{prep}
+				\depedge{2}{5}{prep}
+			\end{dependency}	
+		\end{center}}
+		{\begin{center}
+				\begin{dependency}[theme = simple]
+					\begin{deptext}[font=\footnotesize]
+						(b) He \& drove  \& \big[ to \& the \& park \& nearby \big] \& \big[ with \& friends \big]\\
+					\end{deptext}
+					\deproot{2}{ROOT}
+					\depedge{2}{3}{prep}
+					\depedge{2}{7}{prep}
+				\end{dependency}	
+			\end{center}}
+Both (a) and (b) have two prepositional phrase (PP) adjuncts, \textit{with friends} and \textit{to the park nearby}. Switching the order of the two PPs does not change either the grammaticality or the meaning of the sentences. As indicated by the acyclic graph, the prepositions in both PPs are dependent on the verb \textit{drove}. In both sentences, the dependency distance between \textit{drove} and the preposition of the first PP is the same; however, in (a), by putting the PP of short length in front of the long one, the distance between \textit{drove} and the preposition of the second PP is shorter than that in (b). In other words, putting \textit{with friends} in front of \textit{to the park nearby} shortens the overall distance between the two dependencies pairs \textit{(drove, with)} and \textit{(drove, to)}. Thus comparatively, the structure of (a) is preferred to that of (b).
+
+The effects of DLM has been examined in various experiments in related fields such as corpus linguistics \cite{temperley2007minimization}, psycholinguistic experiments \cite{yamashita2001long}, natural language processing \cite{gildea2007optimizing} and so on. As predictive as DLM is, other factors that govern linguistic universals await to be discovered. The interaction between DLM and other preferences and constraints in different contexts is currently under investigation \cite{gulordava2015dependency, wiechmann2013domain}. If the account for the cross-linguistic pattern of DLM is indeed driven by ease of processing and the goal for efficient communication, we expect other factors that have been found to facilitate processing efficiency to exert an effect on language universals as well. One of the factors that have been shown in previous literature to be relevant to the ease or difficulty of processing is frequency of occurrences \cite{hawkins2014cross}. In the current study, we examine the effect of DLM and lexical frequency in PP ordering in English. The remainder of the abstract is organized as follows: in section 2 we give a review of work related to our study; in section 3 we describe our experiments and results.
+
+\section{Related Work}
+
+The traditional ordering rule of PP and adverbials in postverbal position in English has been claimed to be semantic, which is Manner before Place before Time (MPT), as in \textit{Zoey danced elegantly on the dance floor at night}. Hawkins (1999) shows that dependency length serves as the primary factor governing the order of PP obliques with the same head, instead of the rule of MPT, and presents empirical evidence from 394 relevant sentences. As seen in the earlier examples of (a) and (b), since each PP has a dependency to the same verb, ordering the shorter PP closer to the verb reduces the overall dependency length by reducing the distance between the farther PP and the verb. Wiechmann and Lohmann \shortcite{wiechmann2013domain} found similar results with 1,256 sentences from both the written and spoken sections of International Corpus of English.
+
+As detailed as both studies are, neither study attempted to account for the role of lexical frequency. The correlation between lexical frequency and structural complexity can be traced back to the markedness hierarchies proposed in Greenberg \shortcite{greenberg1966universals}. For instance, in languages with rich morphology, the markedness hierarchy of case (Nom$>$Acc$>$Dat$>$Other) corresponds to performance frequency ranking of the different cases; in other words, as the formal marking increases from \textit{Nom} to \textit{Other}, the frequency of occurrences of each case marking declines. The markedness hierarchy of number (Sing$>$Plur$>$Dual$>$Trial/Paucal) show the same correspondence to performance frequency hierarchy as well (e.g. in English singular form \textit{dog} is less morphologically complex than the plural form \textit{dogs}, and thus occurs more often than plural form). As indicated in Keenan and Comrie’s Accessibility Hierarchy \shortcite{keenan1977noun}, the underlying cause for such pattern is attributed to ease of processing which declines for each position down the hierarchy. The processing load of different hierarchy positions is shaped by their complexity and frequency of occurrence. More frequent categories are associated with greater processing ease, accessibility and predictability, whereas less frequent items are harder to access; they require more effort for activation and processing, and thus more explicit coding is needed down the hierarchies. 
+
+Here we leverage larger corpora annotated with syntactic information and commonly used in computational linguistics to explore the role of DLM, MPT and lexical frequency in PP ordering with a comparative analysis using a larger number of PPs in different language genres. We hypothesize that both DLM and lexical frequency play a role in PP ordering, and specifically that PPs with more frequent words, which are presumably more easily processed and retrieved on average, tend to appear first. 
+
+\section{Experiments \& Results}
+
+\subsection{Data}
+
+We use the Penn Treebank \cite{marcus1993building}, which includes syntactic structures for approximately one million words of text from each of: the Wall Street Journal (WSJ), transcriptions of spontaneous spoken conversations from the Switchboard corpus \cite{godfrey1992switchboard}, and the Brown corpus \cite{kuvcera1967computational}. We search for sentences in the Penn Treebank with verb phrases (VPs) containing exactly two PP obliques that are attached to the same verb, where the order of the PPs can be switched without changing the grammaticality or the meaning of the sentence. Then we mannually check a subsample from each of the three corpora to confirm that the cases we extract fall within our search criteria.
+
+\subsection{Effects of DLM on PP ordering}
+
+We measure the lengths of the PP closer to the verb and of the PP farther from the verb, then calculate the proportion of cases where the short PP occurs closer to the head verb (V), the long PP appears closer to the V, or when the two PPs are of equal length in all the extracted sentences in the three corpora respectively. As shown in Table 1, the order predicted by DLM is strongly preferred, as the majority of the VPs tend to put the PP of shorter length closer to the head verb. However, in roughly 20\% of all sentences, DLM makes no prediction, since the two PPs have the same number of words. The similar patterns in WSJ, Switchboard and Brown suggest both that DLM is in fact a strong predictor of PP order, and that there are other mechanisms that interact with DLM in regular fashion. 
+
+\begin{table}[h!]
+\small
+\centering
+				\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+		\hline 
+		Corpus & \bf Short PP closer to V & Long PP closer to V & Equal length & Total \\ \hline
+	WSJ & \bf 54.7\% & 22.4\% & 22.7\% & 3596 \\
+	Brown & \bf 62.2\% & 17.9\% & 19.9\% & 3033 \\
+	Switchboard & \bf 48.3\% & 27.3\% & 24.4\% & 1187 \\
+	\hline
+				\end{tabular}	
+		\caption{Effects of DLM in English}
+			\end{table}
+
+\subsection{Effects of MPT on PP ordering}
+
+While Hawkins \shortcite{hawkins1999relative} found that MPT plays no significant role in PP ordering, and Wiechmann and Lohmann \shortcite{wiechmann2013domain} found it plays only a weak role, it is very effective in predicting PP order when each of the two PPs are annotated in the treebank with function tags that reflect manner, place or time. MPT applies only to less than 6\% of all sentences with two PPs with the same head, correctly predicting the order of 89.3\% of such sentences in WSJ, 100\% in Switchboard and 100\% in Brown. However, because it applies so infrequently, its overall impact is much smaller than that of DLM.
+
+\subsection{Effects of lexical frequency on PP ordering}
+
+Our initial examination of the role of lexical frequency as a factor in PP ordering attempts to address the hypothesis that words that occur more frequently tend to appear first, as they are easier to retrieve. If that were the case, then in the extracted cases here the PP of higher frequency would be expected to be put closer to the head verb, regardless of its length compared to the other one. To address our hypothesis we first estimate a unigram language model using approximate 20 million words from the Wall Street Journal, not overlapping with the Penn Treebank WSJ corpus. As indicated in Table 2, in about 55\% of all the sentences with two PP obliques of the same verb as head in the Penn Treebank WSJ, PPs with words that are more frequent in general (i.e. words with higher unigram probability) appear closer to their heads. We find similar results from Brown (55.4\%), whereas in Switchboard around half of the extracted sentences have a PP of higher frequency closer to the head verb. 
+
+Among the cases from Penn Treebank WSJ with two PP obliques of equal length (22.7\%, denoted as Equal length PPs in Table 1), 69.8\% follow the prediction that PPs that occur more frequently appear closer to their heads, as shown in Table 3. However, the results for Brown and Switchboard are relatively lower ( 54.5\% and 49\%), which shows that lexical frequency estimated from a Wall Street Journal corpus is not effective at making correct predictions for Brown and Switchboard. This discrepancy is likely due to language genre and domain since our unigram model is highly specific to WSJ. To investigate this, we calculate lexical frequency for PPs in each extracted sentence using word counts derived from the Google Web Trillion Word Corpus. We find similar results for when the PP of higher frequency is closer to the head across the three corpora. The discrepancy among the three corpora regarding the effect of lexical frequency on PP ordering when the two PPs are of equal length still exists, which provides evidence that language genre and domain show an influence on PP ordering in our experiments.
+
+\begin{table}[h!]
+\small
+\centering
+				\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{2cm}|}
+		\hline
+	Model &	WSJ & Brown & Switchboard \\ \hline
+	& 55.1\% & 55.4\% & 49.9\% \\
+	& 52.5\% & 58.5\% & 51.6\% \\
+	\hline
+				\end{tabular}	
+		\caption{Effects of lexical frequency in English}
+		\end{table}
+		
+\begin{table}[h!]
+\small
+\centering
+				\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{2cm}|}
+		\hline
+	Model &	WSJ & Brown & Switchboard \\ \hline
+	& 69.8\% & 54.5\% & 49\% \\
+	& 70.1\% & 53.8\% & 49.3\% \\
+	\hline
+				\end{tabular}	
+		\caption{ Equal-length PP ordering according to lexical frequency}
+		\end{table}
+		
+ Based on estimation from both unigram models mentioned above, a simplistic combination of DLM and lexical frequency that uses primarily DLM to predict PP ordering and falls back to lexical frequency when the PPs are of equal length would correctly predict the PP ordering of around 70\% of all WSJ and Brown sentences. The prediction for PP ordering in sentences from Switchboard is comparatively lower (60\%). To further explore the role of DLM and lexical frequency, we plan to fit statistical models to our data in order to measure to what extent the two factors affect PP ordering in English, and why such effects exist. In addition, to truly discern which effects and patterns are universal and whether they are language-specific or not, we would expand our scope of inquiry and extend our experiments to other languages with available corpora in order to enhance our examinations of factors and constraints that affect language universals, as well as to advance our understanding of language processing.
+ 
+\begin{table}[h!]
+\small
+\centering
+				\begin{tabular}{|p{1cm}|p{1cm}|p{2cm}|p{2cm}|}
+		\hline
+	Model &	WSJ & Brown & Switchboard \\ \hline
+	& 69.4\% & 71.8\% & 60.2\% \\
+	& 70.7\& & 72.9\% & 60.3\% \\ 
+	\hline
+				\end{tabular}	
+		\caption{Prediction by combination of DLM and lexical frequency}
+		\end{table}
+
+
+\bibliography{SCiL2018extended}
+\bibliographystyle{naaclhlt2016}
+
+
+\end{document}
